@@ -78,8 +78,8 @@ const timer = (() => {
 
     return {
         tick: () => {
-            frame++
             update(divide(frame * secondDuration, 60n))
+            frame++
         }
     }
 })()
