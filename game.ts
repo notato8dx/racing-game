@@ -103,7 +103,7 @@ const car = (() => {
 
         return element.style
     })()
-    
+
     return {
         set transform({
             position: [horizontalPosition, verticalPosition],
@@ -113,7 +113,7 @@ const car = (() => {
             orientation: number
         }) {
             style.transform = `translateX(${horizontalPosition}px) translateY(${verticalPosition}px) rotateZ(${orientation}rad)`
-        } 
+        }
     }
 })()
 
