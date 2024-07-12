@@ -1,3 +1,161 @@
+namespace Physics {
+    namespace Time {
+        const secondDuration = 1000n
+        const minuteDuration = 60n
+
+        function divide(dividend: bigint, divisor: bigint) {
+            return (dividend + divisor / 2n) / divisor
+        }
+
+        function format(number: string, digit: number): string {
+            if (digit <= 1) {
+                return number
+            } else {
+                return `${number.length < digit ? '0' : ''}${format(number, digit - 1)}`
+            }
+        }
+
+        class Element {
+            readonly #element
+
+            constructor(element: HTMLSpanElement) {
+                this.#element = element
+            }
+
+            set time(time: string) {
+                this.#element.textContent = time
+            }
+        }
+
+        export class Timer {
+            readonly #minute
+            readonly #second
+            readonly #millisecond
+
+            #frame = 0n
+
+            constructor() {
+                const minute = document.createElement('span')
+                this.#minute = new Element(minute)
+
+                const second = document.createElement('span')
+                this.#second = new Element(second)
+
+                const millisecond = document.createElement('span')
+                this.#millisecond = new Element(millisecond)
+
+                const timer = document.createElement('timer')
+                timer.replaceChildren(minute, ':', second, '.', millisecond)
+                document.body.appendChild(timer)
+            }
+
+            tick() {
+                const millisecond = divide(this.#frame * secondDuration, 60n)
+                const second = millisecond / secondDuration
+
+                this.#minute.time = (second / minuteDuration).toString()
+                this.#second.time = format((second % minuteDuration).toString(), 2)
+                this.#millisecond.time = format((millisecond % secondDuration).toString(), 3)
+
+                this.#frame++
+            }
+        }
+    }
+
+    type vector = [number, number]
+
+    function add(augend: vector, addend: vector): vector {
+        return [augend[0] + addend[0], augend[1] + addend[1]]
+    }
+
+    function multiply(multiplicand: vector, multiplier: number): vector {
+        return [multiplicand[0] * multiplier, multiplicand[1] * multiplier]
+    }
+
+    function reduce(number: number, modulus: number) {
+        return (number + modulus) % modulus
+    }
+
+    class Axis {
+        readonly #positive
+        readonly #negative
+
+        constructor(positive: Key, negative: Key) {
+            this.#positive = positive
+            this.#negative = negative
+        }
+
+        get factor() {
+            return this.#positive.factor - this.#negative.factor
+        }
+    }
+
+    class Key {
+        #pressed = false
+
+        constructor(code: string) {
+            document.addEventListener('keydown', ({ code: eventCode }) => {
+                if (eventCode == code) {
+                    this.#pressed = true
+                }
+            })
+
+            document.addEventListener('keyup', ({ code: eventCode }) => {
+                if (eventCode == code) {
+                    this.#pressed = false
+                }
+            })
+        }
+
+        get factor() {
+            return this.#pressed ? 1 : 0
+        }
+    }
+
+    class Figure {
+        readonly #style
+
+        constructor(element: HTMLElement) {
+            document.body.appendChild(element)
+            this.#style = element.style
+        }
+
+        set transform({
+            position: [horizontalPosition, verticalPosition],
+            orientation
+        }: {
+            position: vector,
+            orientation: number
+        }) {
+            this.#style.transform = `translateX(${horizontalPosition}px) translateY(${verticalPosition}px) rotateZ(${orientation}rad)`
+        }
+    }
+
+    export class Game {
+        readonly #steeringAxis = new Axis(new Key('ArrowRight'), new Key('ArrowLeft'))
+        readonly #car = new Figure(document.createElement('car'))
+        readonly #timer = new Time.Timer()
+
+        constructor() {
+            this.#tick([40, 270], 0)
+        }
+
+        #tick(position: vector, orientation: number) {
+            this.#car.transform = { position, orientation }
+            this.#timer.tick()
+
+            requestAnimationFrame(() => {
+                this.#tick(
+                    add(position, multiply([Math.sin(orientation), -Math.cos(orientation)], 2.5)),
+                    reduce(orientation + 0.05 * this.#steeringAxis.factor, 6.283185307179586)
+                )
+            })
+        }
+    }
+}
+
+new Physics.Game()
+
 for (const row of [
     [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
     [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],

@@ -1,28 +1,33 @@
-<!doctype html>
-
-<html lang="zxx">
-    <meta charset="utf-8" name="viewport" content="width=device-width">
-    <title>Racing Game</title>
+<html style="
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%
+">
     <style>
-        html {
-            background-color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%
+        timer {
+            color: white;
+            font-family: monospace
         }
 
-        body {
-            width: 800px;
-            height: 540px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+        car {
+            width: 10px;
+            height: 15px;
+            background-color: red;
+            display: block;
+            inset: -7.5px -5px;
+            position: absolute
         }
     </style>
 
-    <body>
-        <script src="game.js"></script>
-        <script src="track.js"></script>
+    <body style="
+        width: 800px;
+        height: 540px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    ">
+        <script src="script.js"></script>
     </body>
 </html>

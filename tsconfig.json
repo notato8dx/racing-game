@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
+        "outFile": "script.js",
+        "sourceMap": true,
         "strict": true,
-        "target": "esnext",
-        "sourceMap": true
+        "target": "esnext"
     },
-    "include": ["*.ts"]
+    "include": ["script.ts"]
 }
