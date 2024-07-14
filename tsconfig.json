@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "outFile": "script.js",
         "sourceMap": true,
         "strict": true,
         "target": "esnext"
