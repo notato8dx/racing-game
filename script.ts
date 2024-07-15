@@ -130,7 +130,7 @@ namespace Physics {
         #position: vector = [40, 270]
         #orientation = 0
 
-        constructor(track: bit[][], trackArea: Node) {
+        constructor(track: Uint8Array[], trackArea: Node) {
             this.#track = track
             this.#car = new Figure(document.createElement('car'), trackArea)
             this.#tick()
@@ -164,7 +164,7 @@ namespace Physics {
     }
 }
 
-function createTrack(buffer: bit[]) {
+function createTrack(buffer: Uint8Array) {
     return [
         buffer.slice(0, 80),
         buffer.slice(80, 160),
@@ -228,17 +228,17 @@ function createTrack(buffer: bit[]) {
     ]
 }
 
-function append(button: HTMLElement, onclick: () => void) {
-    button.onclick = () => {
-        button.remove()
+function append(element: HTMLElement, onclick: () => void) {
+    element.onclick = () => {
+        element.remove()
         onclick()
     }
 
-    button.textContent = 'Start'
-    document.body.appendChild(button)
+    element.textContent = 'Start'
+    document.body.appendChild(element)
 }
 
-function setupTrackArea(track: bit[][], trackArea: Node) {
+function setupTrackArea(track: Uint8Array[], trackArea: Node) {
     for (const row of track) {
         const rowElement = document.createElement('div')
         rowElement.style.minHeight = '10px'
@@ -248,7 +248,13 @@ function setupTrackArea(track: bit[][], trackArea: Node) {
             const tileElement = document.createElement('div')
             tileElement.style.width = '10px'
             tileElement.style.height = '10px'
-            tileElement.style.backgroundColor = (['black', 'white'] as [string, string])[tile]
+
+            if (tile == 1) {
+                tileElement.style.backgroundColor = 'white'
+            } else {
+                tileElement.style.backgroundColor = 'black'
+            }
+
             rowElement.appendChild(tileElement)
         }
 
@@ -271,7 +277,7 @@ function setupTrackArea(track: bit[][], trackArea: Node) {
             throw new Error()
         }
 
-        setupTrackArea(createTrack(new Uint8Array(await input.files[0].arrayBuffer()) as unknown as bit[]), document.createElement('racetrack'))
+        setupTrackArea(createTrack(new Uint8Array(await input.files[0].arrayBuffer())), document.createElement('racetrack'))
     })
 
     document.body.appendChild(input)
