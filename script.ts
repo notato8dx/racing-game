@@ -130,7 +130,7 @@ namespace Physics {
         #position: vector = [40, 270]
         #orientation = 0
 
-        constructor(track: Uint8Array[], trackArea: Node) {
+        constructor(track: (number | undefined)[][], trackArea: Node) {
             this.#track = track
             this.#car = new Figure(document.createElement('car'), trackArea)
             this.#tick()
@@ -164,67 +164,66 @@ namespace Physics {
     }
 }
 
+function slice(array: Uint8Array, start: number) {
+    return [array[start], array[start + 1], array[start + 2], array[start + 3], array[start + 4], array[start + 5], array[start + 6], array[start + 7], array[start + 8], array[start + 9], array[start + 10], array[start + 11], array[start + 12], array[start + 13], array[start + 14], array[start + 15], array[start + 16], array[start + 17], array[start + 18], array[start + 19], array[start + 20], array[start + 21], array[start + 22], array[start + 23], array[start + 24], array[start + 25], array[start + 26], array[start + 27], array[start + 28], array[start + 29], array[start + 30], array[start + 31], array[start + 32], array[start + 33], array[start + 34], array[start + 35], array[start + 36], array[start + 37], array[start + 38], array[start + 39], array[start + 40], array[start + 41], array[start + 42], array[start + 43], array[start + 44], array[start + 45], array[start + 46], array[start + 47], array[start + 48], array[start + 49], array[start + 50], array[start + 51], array[start + 52], array[start + 53], array[start + 54], array[start + 55], array[start + 56], array[start + 57], array[start + 58], array[start + 59], array[start + 60], array[start + 61], array[start + 62], array[start + 63], array[start + 64], array[start + 65], array[start + 66], array[start + 67], array[start + 68], array[start + 69], array[start + 70], array[start + 71], array[start + 72], array[start + 73], array[start + 74], array[start + 75], array[start + 76], array[start + 77], array[start + 78], array[start + 79]]
+}
+
 function createTrack(buffer: Uint8Array) {
     return [
-        buffer.slice(0, 80),
-        buffer.slice(80, 160),
-        buffer.slice(160, 240),
-        buffer.slice(240, 320),
-        buffer.slice(320, 400),
-        buffer.slice(400, 480),
-        buffer.slice(480, 560),
-        buffer.slice(560, 640),
-        buffer.slice(640, 720),
-
-        buffer.slice(720, 800),
-        buffer.slice(800, 880),
-        buffer.slice(880, 960),
-        buffer.slice(960, 1040),
-        buffer.slice(1040, 1120),
-        buffer.slice(1120, 1200),
-        buffer.slice(1200, 1280),
-        buffer.slice(1280, 1360),
-        buffer.slice(1360, 1440),
-
-        buffer.slice(1440, 1520),
-        buffer.slice(1520, 1600),
-        buffer.slice(1600, 1680),
-        buffer.slice(1680, 1760),
-        buffer.slice(1760, 1840),
-        buffer.slice(1840, 1920),
-        buffer.slice(1920, 2000),
-        buffer.slice(2000, 2080),
-        buffer.slice(2080, 2160),
-
-        buffer.slice(2160, 2240),
-        buffer.slice(2240, 2320),
-        buffer.slice(2320, 2400),
-        buffer.slice(2400, 2480),
-        buffer.slice(2480, 2560),
-        buffer.slice(2560, 2640),
-        buffer.slice(2640, 2720),
-        buffer.slice(2720, 2800),
-        buffer.slice(2800, 2880),
-
-        buffer.slice(2880, 2960),
-        buffer.slice(2960, 3040),
-        buffer.slice(3040, 3120),
-        buffer.slice(3120, 3200),
-        buffer.slice(3200, 3280),
-        buffer.slice(3280, 3360),
-        buffer.slice(3360, 3440),
-        buffer.slice(3440, 3520),
-        buffer.slice(3520, 3600),
-
-        buffer.slice(3600, 3680),
-        buffer.slice(3680, 3760),
-        buffer.slice(3760, 3840),
-        buffer.slice(3840, 3920),
-        buffer.slice(3920, 4000),
-        buffer.slice(4000, 4080),
-        buffer.slice(4080, 4160),
-        buffer.slice(4160, 4240),
-        buffer.slice(4240, 4320)
+        slice(buffer, 0),
+        slice(buffer, 80),
+        slice(buffer, 160),
+        slice(buffer, 240),
+        slice(buffer, 320),
+        slice(buffer, 400),
+        slice(buffer, 480),
+        slice(buffer, 560),
+        slice(buffer, 640),
+        slice(buffer, 720),
+        slice(buffer, 800),
+        slice(buffer, 880),
+        slice(buffer, 960),
+        slice(buffer, 1040),
+        slice(buffer, 1120),
+        slice(buffer, 1200),
+        slice(buffer, 1280),
+        slice(buffer, 1360),
+        slice(buffer, 1440),
+        slice(buffer, 1520),
+        slice(buffer, 1600),
+        slice(buffer, 1680),
+        slice(buffer, 1760),
+        slice(buffer, 1840),
+        slice(buffer, 1920),
+        slice(buffer, 2000),
+        slice(buffer, 2080),
+        slice(buffer, 2160),
+        slice(buffer, 2240),
+        slice(buffer, 2320),
+        slice(buffer, 2400),
+        slice(buffer, 2480),
+        slice(buffer, 2560),
+        slice(buffer, 2640),
+        slice(buffer, 2720),
+        slice(buffer, 2800),
+        slice(buffer, 2880),
+        slice(buffer, 2960),
+        slice(buffer, 3040),
+        slice(buffer, 3120),
+        slice(buffer, 3200),
+        slice(buffer, 3280),
+        slice(buffer, 3360),
+        slice(buffer, 3440),
+        slice(buffer, 3520),
+        slice(buffer, 3600),
+        slice(buffer, 3680),
+        slice(buffer, 3760),
+        slice(buffer, 3840),
+        slice(buffer, 3920),
+        slice(buffer, 4000),
+        slice(buffer, 4080),
+        slice(buffer, 4160),
+        slice(buffer, 4240)
     ]
 }
 
@@ -238,7 +237,7 @@ function append(element: HTMLElement, onclick: () => void) {
     document.body.appendChild(element)
 }
 
-function setupTrackArea(track: Uint8Array[], trackArea: Node) {
+function setupTrackArea(track: (number | undefined)[][], trackArea: Node) {
     for (const row of track) {
         const rowElement = document.createElement('div')
         rowElement.style.minHeight = '10px'
