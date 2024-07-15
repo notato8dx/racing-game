@@ -1,3 +1,10 @@
+const heading = document.createElement('h1')
+heading.textContent = 'Racing Game'
+document.body.appendChild(heading)
+
+const trackArea = document.createElement('div')
+trackArea.style.position = 'relative'
+
 namespace Physics {
     namespace Time {
         const secondDuration = 1000n
@@ -116,7 +123,7 @@ namespace Physics {
         readonly #style
 
         constructor(element: HTMLElement) {
-            document.body.appendChild(element)
+            trackArea.appendChild(element)
             this.#style = element.style
         }
 
@@ -165,6 +172,8 @@ input.addEventListener('change', () => {
     if (input.files == null) {
         return
     }
+
+    input.remove()
 
     input.files[0].arrayBuffer().then(arrayBuffer => {
         const bytes = new Uint8Array(arrayBuffer)
@@ -243,19 +252,23 @@ input.addEventListener('change', () => {
                 rowElement.appendChild(tileElement)
             }
 
-            document.body.appendChild(rowElement)
+            trackArea.appendChild(rowElement)
         }
 
         const game = new Physics.Game(track)
 
         const button = document.createElement('button')
+        button.style.zIndex = '1'
+        button.style.position = 'absolute'
         button.textContent = 'Start'
         button.onclick = () => {
+            button.remove()
             game.tick([40, 270], 0)
         }
 
+        heading.remove()
+        document.body.appendChild(trackArea)
         document.body.appendChild(button)
-
     })
 })
 document.body.appendChild(input)
