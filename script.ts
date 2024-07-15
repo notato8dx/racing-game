@@ -1,7 +1,3 @@
-const heading = document.createElement('h1')
-heading.textContent = 'Racing Game'
-document.body.appendChild(heading)
-
 const trackArea = document.createElement('div')
 trackArea.style.position = 'relative'
 
@@ -138,14 +134,94 @@ namespace Physics {
         }
     }
 
+    function createTrack(buffer: Uint8Array) {
+        return [
+            buffer.slice(0, 80),
+            buffer.slice(80, 160),
+            buffer.slice(160, 240),
+            buffer.slice(240, 320),
+            buffer.slice(320, 400),
+            buffer.slice(400, 480),
+            buffer.slice(480, 560),
+            buffer.slice(560, 640),
+            buffer.slice(640, 720),
+
+            buffer.slice(720, 800),
+            buffer.slice(800, 880),
+            buffer.slice(880, 960),
+            buffer.slice(960, 1040),
+            buffer.slice(1040, 1120),
+            buffer.slice(1120, 1200),
+            buffer.slice(1200, 1280),
+            buffer.slice(1280, 1360),
+            buffer.slice(1360, 1440),
+
+            buffer.slice(1440, 1520),
+            buffer.slice(1520, 1600),
+            buffer.slice(1600, 1680),
+            buffer.slice(1680, 1760),
+            buffer.slice(1760, 1840),
+            buffer.slice(1840, 1920),
+            buffer.slice(1920, 2000),
+            buffer.slice(2000, 2080),
+            buffer.slice(2080, 2160),
+
+            buffer.slice(2160, 2240),
+            buffer.slice(2240, 2320),
+            buffer.slice(2320, 2400),
+            buffer.slice(2400, 2480),
+            buffer.slice(2480, 2560),
+            buffer.slice(2560, 2640),
+            buffer.slice(2640, 2720),
+            buffer.slice(2720, 2800),
+            buffer.slice(2800, 2880),
+
+            buffer.slice(2880, 2960),
+            buffer.slice(2960, 3040),
+            buffer.slice(3040, 3120),
+            buffer.slice(3120, 3200),
+            buffer.slice(3200, 3280),
+            buffer.slice(3280, 3360),
+            buffer.slice(3360, 3440),
+            buffer.slice(3440, 3520),
+            buffer.slice(3520, 3600),
+
+            buffer.slice(3600, 3680),
+            buffer.slice(3680, 3760),
+            buffer.slice(3760, 3840),
+            buffer.slice(3840, 3920),
+            buffer.slice(3920, 4000),
+            buffer.slice(4000, 4080),
+            buffer.slice(4080, 4160),
+            buffer.slice(4160, 4240),
+            buffer.slice(4240, 4320)
+        ]
+    }
+
     export class Game {
         readonly #steeringAxis = new Axis(new Key('ArrowRight'), new Key('ArrowLeft'))
         readonly #car = new Figure(document.createElement('car'))
         readonly #timer = new Time.Timer()
         readonly #track
 
-        constructor(track: Uint8Array[]) {
-            this.#track = track
+        constructor(buffer: ArrayBuffer) {
+            this.#track = createTrack(new Uint8Array(buffer))
+
+            for (const row of this.#track) {
+                const rowElement = document.createElement('div')
+                rowElement.style.minHeight = '10px'
+                rowElement.style.display = 'flex'
+
+                for (const tile of row) {
+                    const tileElement = document.createElement('div')
+                    tileElement.style.width = '10px'
+                    tileElement.style.height = '10px'
+                    tileElement.style.backgroundColor = ['black', 'white'][tile]
+                    rowElement.appendChild(tileElement)
+                }
+
+                trackArea.appendChild(rowElement)
+            }
         }
 
         tick(position: vector, orientation: number) {
@@ -166,97 +242,12 @@ namespace Physics {
     }
 }
 
-const input = document.createElement('input')
-input.type = 'file'
-input.addEventListener('change', () => {
-    if (input.files == null) {
-        return
+namespace Writing {
+    interface Child {
+        remove: () => void
     }
 
-    input.remove()
-
-    input.files[0].arrayBuffer().then(arrayBuffer => {
-        const bytes = new Uint8Array(arrayBuffer)
-        const track = [
-            bytes.slice(0, 80),
-            bytes.slice(80, 160),
-            bytes.slice(160, 240),
-            bytes.slice(240, 320),
-            bytes.slice(320, 400),
-            bytes.slice(400, 480),
-            bytes.slice(480, 560),
-            bytes.slice(560, 640),
-            bytes.slice(640, 720),
-
-            bytes.slice(720, 800),
-            bytes.slice(800, 880),
-            bytes.slice(880, 960),
-            bytes.slice(960, 1040),
-            bytes.slice(1040, 1120),
-            bytes.slice(1120, 1200),
-            bytes.slice(1200, 1280),
-            bytes.slice(1280, 1360),
-            bytes.slice(1360, 1440),
-
-            bytes.slice(1440, 1520),
-            bytes.slice(1520, 1600),
-            bytes.slice(1600, 1680),
-            bytes.slice(1680, 1760),
-            bytes.slice(1760, 1840),
-            bytes.slice(1840, 1920),
-            bytes.slice(1920, 2000),
-            bytes.slice(2000, 2080),
-            bytes.slice(2080, 2160),
-
-            bytes.slice(2160, 2240),
-            bytes.slice(2240, 2320),
-            bytes.slice(2320, 2400),
-            bytes.slice(2400, 2480),
-            bytes.slice(2480, 2560),
-            bytes.slice(2560, 2640),
-            bytes.slice(2640, 2720),
-            bytes.slice(2720, 2800),
-            bytes.slice(2800, 2880),
-
-            bytes.slice(2880, 2960),
-            bytes.slice(2960, 3040),
-            bytes.slice(3040, 3120),
-            bytes.slice(3120, 3200),
-            bytes.slice(3200, 3280),
-            bytes.slice(3280, 3360),
-            bytes.slice(3360, 3440),
-            bytes.slice(3440, 3520),
-            bytes.slice(3520, 3600),
-
-            bytes.slice(3600, 3680),
-            bytes.slice(3680, 3760),
-            bytes.slice(3760, 3840),
-            bytes.slice(3840, 3920),
-            bytes.slice(3920, 4000),
-            bytes.slice(4000, 4080),
-            bytes.slice(4080, 4160),
-            bytes.slice(4160, 4240),
-            bytes.slice(4240, 4320)
-        ]
-
-        for (const row of track) {
-            const rowElement = document.createElement('div')
-            rowElement.style.minHeight = '10px'
-            rowElement.style.display = 'flex'
-
-            for (const tile of row) {
-                const tileElement = document.createElement('div')
-                tileElement.style.width = '10px'
-                tileElement.style.height = '10px'
-                tileElement.style.backgroundColor = ['black', 'white'][tile]
-                rowElement.appendChild(tileElement)
-            }
-
-            trackArea.appendChild(rowElement)
-        }
-
-        const game = new Physics.Game(track)
-
+    function start(game: Physics.Game) {
         const button = document.createElement('button')
         button.style.zIndex = '1'
         button.style.position = 'absolute'
@@ -265,10 +256,33 @@ input.addEventListener('change', () => {
             button.remove()
             game.tick([40, 270], 0)
         }
-
-        heading.remove()
-        document.body.appendChild(trackArea)
         document.body.appendChild(button)
-    })
-})
-document.body.appendChild(input)
+    }
+
+    export function write(node: Node & Child): Child {
+        document.body.appendChild(node)
+        return node
+    }
+
+    export function initialize(heading: Child, input: HTMLInputElement) {
+        input.type = 'file'
+
+        input.addEventListener('change', () => {
+            if (!input.files) {
+                return
+            }
+
+            input.remove()
+
+            input.files[0].arrayBuffer().then(buffer => {
+                start(new Physics.Game(buffer))
+                heading.remove()
+                document.body.appendChild(trackArea)
+            })
+        })
+
+        document.body.appendChild(input)
+    }
+}
+
+Writing.initialize(Writing.write(document.createTextNode('Racing Game')), document.createElement('input'))
