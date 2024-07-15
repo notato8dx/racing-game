@@ -164,8 +164,18 @@ namespace Physics {
     }
 }
 
-function slice(array: Uint8Array, start: number) {
-    return [array[start], array[start + 1], array[start + 2], array[start + 3], array[start + 4], array[start + 5], array[start + 6], array[start + 7], array[start + 8], array[start + 9], array[start + 10], array[start + 11], array[start + 12], array[start + 13], array[start + 14], array[start + 15], array[start + 16], array[start + 17], array[start + 18], array[start + 19], array[start + 20], array[start + 21], array[start + 22], array[start + 23], array[start + 24], array[start + 25], array[start + 26], array[start + 27], array[start + 28], array[start + 29], array[start + 30], array[start + 31], array[start + 32], array[start + 33], array[start + 34], array[start + 35], array[start + 36], array[start + 37], array[start + 38], array[start + 39], array[start + 40], array[start + 41], array[start + 42], array[start + 43], array[start + 44], array[start + 45], array[start + 46], array[start + 47], array[start + 48], array[start + 49], array[start + 50], array[start + 51], array[start + 52], array[start + 53], array[start + 54], array[start + 55], array[start + 56], array[start + 57], array[start + 58], array[start + 59], array[start + 60], array[start + 61], array[start + 62], array[start + 63], array[start + 64], array[start + 65], array[start + 66], array[start + 67], array[start + 68], array[start + 69], array[start + 70], array[start + 71], array[start + 72], array[start + 73], array[start + 74], array[start + 75], array[start + 76], array[start + 77], array[start + 78], array[start + 79]]
+function slice(array: Uint8Array, start: number, i = 0): bit[] {
+    const bit = array[start + i]
+
+    if (bit != 0 && bit != 1) {
+        throw new Error('File format is invalid')
+    }
+
+    if (i == 79) {
+        return [bit]
+    } else {
+        return [bit, ...slice(array, start, i + 1)]
+    }
 }
 
 function createTrack(buffer: Uint8Array) {
@@ -237,7 +247,7 @@ function append(element: HTMLElement, onclick: () => void) {
     document.body.appendChild(element)
 }
 
-function setupTrackArea(track: (number | undefined)[][], trackArea: Node) {
+function setupTrackArea(track: bit[][], trackArea: Node) {
     for (const row of track) {
         const rowElement = document.createElement('div')
         rowElement.style.minHeight = '10px'
@@ -247,12 +257,7 @@ function setupTrackArea(track: (number | undefined)[][], trackArea: Node) {
             const tileElement = document.createElement('div')
             tileElement.style.width = '10px'
             tileElement.style.height = '10px'
-
-            if (tile == 1) {
-                tileElement.style.backgroundColor = 'white'
-            } else {
-                tileElement.style.backgroundColor = 'black'
-            }
+            tileElement.style.backgroundColor = (['black', 'white'] as const)[tile]
 
             rowElement.appendChild(tileElement)
         }
