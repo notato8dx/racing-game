@@ -135,17 +135,22 @@ namespace Physics {
         readonly #steeringAxis = new Axis(new Key('ArrowRight'), new Key('ArrowLeft'))
         readonly #car = new Figure(document.createElement('car'))
         readonly #timer = new Time.Timer()
+        readonly #track
 
-        constructor() {
-            this.#tick([40, 270], 0)
+        constructor(track: Uint8Array[]) {
+            this.#track = track
         }
 
-        #tick(position: vector, orientation: number) {
+        tick(position: vector, orientation: number) {
+            if (this.#track[Math.trunc(position[1] / 10)][Math.trunc(position[0] / 10)] == 1) {
+                console.log('collision')
+            }
+
             this.#car.transform = { position, orientation }
             this.#timer.tick()
 
             requestAnimationFrame(() => {
-                this.#tick(
+                this.tick(
                     add(position, multiply([Math.sin(orientation), -Math.cos(orientation)], 2.5)),
                     reduce(orientation + 0.05 * this.#steeringAxis.factor, 6.283185307179586)
                 )
@@ -153,8 +158,6 @@ namespace Physics {
         }
     }
 }
-
-new Physics.Game()
 
 const input = document.createElement('input')
 input.type = 'file'
@@ -165,7 +168,7 @@ input.addEventListener('change', () => {
 
     input.files[0].arrayBuffer().then(arrayBuffer => {
         const bytes = new Uint8Array(arrayBuffer)
-        for (const row of [
+        const track = [
             bytes.slice(0, 80),
             bytes.slice(80, 160),
             bytes.slice(160, 240),
@@ -225,7 +228,9 @@ input.addEventListener('change', () => {
             bytes.slice(4080, 4160),
             bytes.slice(4160, 4240),
             bytes.slice(4240, 4320)
-        ]) {
+        ]
+
+        for (const row of track) {
             const rowElement = document.createElement('div')
             rowElement.style.minHeight = '10px'
             rowElement.style.display = 'flex'
@@ -240,6 +245,17 @@ input.addEventListener('change', () => {
 
             document.body.appendChild(rowElement)
         }
+
+        const game = new Physics.Game(track)
+
+        const button = document.createElement('button')
+        button.textContent = 'Start'
+        button.onclick = () => {
+            game.tick([40, 270], 0)
+        }
+
+        document.body.appendChild(button)
+
     })
 })
 document.body.appendChild(input)
