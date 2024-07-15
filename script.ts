@@ -249,16 +249,11 @@ function append(element: HTMLElement, onclick: () => void) {
 
 function setupTrackArea(track: bit[][], trackArea: Node) {
     for (const row of track) {
-        const rowElement = document.createElement('div')
-        rowElement.style.minHeight = '10px'
-        rowElement.style.display = 'flex'
+        const rowElement = document.createElement('track-row')
 
         for (const tile of row) {
-            const tileElement = document.createElement('div')
-            tileElement.style.width = '10px'
-            tileElement.style.height = '10px'
+            const tileElement = document.createElement('track-tile')
             tileElement.style.backgroundColor = (['black', 'white'] as const)[tile]
-
             rowElement.appendChild(tileElement)
         }
 
