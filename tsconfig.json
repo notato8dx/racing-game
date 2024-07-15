@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
+        "noUncheckedIndexedAccess": true,
         "sourceMap": true,
         "strict": true,
         "target": "esnext"
     },
-    "include": ["script.ts"]
+    "files": ["script.ts"]
 }
