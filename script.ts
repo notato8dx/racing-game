@@ -1,6 +1,3 @@
-const trackArea = document.createElement('div')
-trackArea.style.position = 'relative'
-
 type bit = 0 | 1
 
 namespace Physics {
@@ -108,7 +105,7 @@ namespace Physics {
     class Figure {
         readonly #style
 
-        constructor(element: HTMLElement) {
+        constructor(element: HTMLElement, trackArea: Node) {
             trackArea.appendChild(element)
             this.#style = element.style
         }
@@ -126,15 +123,16 @@ namespace Physics {
 
     export class Game {
         readonly #steeringAxis = new Axis(new Key('ArrowRight'), new Key('ArrowLeft'))
-        readonly #car = new Figure(document.createElement('car'))
+        readonly #car
         readonly #timer = new Time.Timer()
         readonly #track
 
         #position: vector = [40, 270]
         #orientation = 0
 
-        constructor(track: bit[][]) {
+        constructor(track: bit[][], trackArea: Node) {
             this.#track = track
+            this.#car = new Figure(document.createElement('car'), trackArea)
             this.#tick()
         }
 
@@ -157,7 +155,7 @@ namespace Physics {
             this.#timer.tick()
 
             this.#position = add(this.#position, multiply([Math.sin(this.#orientation), -Math.cos(this.#orientation)], 2.5)),
-            this.#orientation = reduce(this.#orientation + 0.05 * this.#steeringAxis.factor, 6.283185307179586)
+                this.#orientation = reduce(this.#orientation + 0.05 * this.#steeringAxis.factor, 6.283185307179586)
 
             requestAnimationFrame(() => {
                 this.#tick()
@@ -230,18 +228,17 @@ function createTrack(buffer: bit[]) {
     ]
 }
 
-function setupStartButton(button: HTMLElement, track: bit[][]) {
-    button.style.zIndex = '1'
-    button.style.position = 'absolute'
-    button.textContent = 'Start'
+function append(button: HTMLElement, onclick: () => void) {
     button.onclick = () => {
         button.remove()
-        new Physics.Game(track)
+        onclick()
     }
+
+    button.textContent = 'Start'
     document.body.appendChild(button)
 }
 
-function setup(track: bit[][]) {
+function setupTrackArea(track: bit[][], trackArea: Node) {
     for (const row of track) {
         const rowElement = document.createElement('div')
         rowElement.style.minHeight = '10px'
@@ -258,25 +255,24 @@ function setup(track: bit[][]) {
         trackArea.appendChild(rowElement)
     }
 
-    setupStartButton(document.createElement('button'), track)
+    document.body.replaceChildren(trackArea)
+
+    append(document.createElement('start-button'), () => {
+        new Physics.Game(track, trackArea)
+    })
 }
 
-function initialize(input: HTMLInputElement) {
+{
+    const input = document.createElement('input')
     input.type = 'file'
 
-    input.addEventListener('change', () => {
+    input.addEventListener('change', async () => {
         if (!input.files || !input.files[0]) {
             throw new Error()
         }
 
-        document.body.replaceChildren(trackArea)
-
-        input.files[0].arrayBuffer().then(buffer => {
-            setup(createTrack(Array.from(new Uint8Array(buffer)) as bit[]))
-        })
+        setupTrackArea(createTrack(new Uint8Array(await input.files[0].arrayBuffer()) as unknown as bit[]), document.createElement('racetrack'))
     })
 
     document.body.appendChild(input)
 }
-
-initialize(document.createElement('input'))

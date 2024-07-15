@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html style="
     background-color: black;
     color: white;
@@ -9,8 +8,17 @@
     align-items: center;
 ">
     <meta name="viewport" content="width=device-width" />
-
     <style>
+        racetrack {
+            position: relative;
+            display: block
+        }
+
+        start-button {
+            z-index: 1;
+            position: fixed
+        }
+
         timer {
             color: white;
             font-family: monospace
@@ -33,4 +41,5 @@
         <h1>Racing Game</h1>
         <script src="script.js"></script>
     </body>
+
 </html>
