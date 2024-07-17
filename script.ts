@@ -139,12 +139,8 @@ namespace Physics {
         #tick() {
             const row = this.#track[Math.trunc(this.#position[1] / 10)]
 
-            if (!row) {
+            if (!row || row[Math.trunc(this.#position[0] / 10)] == 1) {
                 return
-            }
-
-            if (row[Math.trunc(this.#position[0] / 10)] == 1) {
-                console.log('collision')
             }
 
             this.#car.transform = {
@@ -178,7 +174,7 @@ function slice(array: Uint8Array, start: number, i = 0): bit[] {
     }
 }
 
-function createTrack(buffer: Uint8Array) {
+function reshape(buffer: Uint8Array) {
     return [
         slice(buffer, 0),
         slice(buffer, 80),
@@ -247,8 +243,8 @@ function append(element: HTMLElement, onclick: () => void) {
     document.body.appendChild(element)
 }
 
-function setupTrackArea(track: bit[][], trackArea: Node) {
-    for (const row of track) {
+function initialize(track: Node, tiles: bit[][]) {
+    for (const row of tiles) {
         const rowElement = document.createElement('track-row')
 
         for (const tile of row) {
@@ -257,13 +253,13 @@ function setupTrackArea(track: bit[][], trackArea: Node) {
             rowElement.appendChild(tileElement)
         }
 
-        trackArea.appendChild(rowElement)
+        track.appendChild(rowElement)
     }
 
-    document.body.replaceChildren(trackArea)
+    document.body.replaceChildren(track)
 
     append(document.createElement('start-button'), () => {
-        new Physics.Game(track, trackArea)
+        new Physics.Game(tiles, track)
     })
 }
 
@@ -276,7 +272,7 @@ function setupTrackArea(track: bit[][], trackArea: Node) {
             throw new Error()
         }
 
-        setupTrackArea(createTrack(new Uint8Array(await input.files[0].arrayBuffer())), document.createElement('racetrack'))
+        initialize(document.createElement('racetrack'), reshape(new Uint8Array(await input.files[0].arrayBuffer())))
     })
 
     document.body.appendChild(input)
