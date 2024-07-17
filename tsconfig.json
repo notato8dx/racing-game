@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
         "noUncheckedIndexedAccess": true,
-        "outFile": "script.js",
+        "outFile": "script",
         "sourceMap": true,
         "strict": true,
         "target": "esnext"
     },
-    "include": ["scripts/*"]
+    "include": ["namespaces/*"]
 }
