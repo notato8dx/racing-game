@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
         "noUncheckedIndexedAccess": true,
+        "outFile": "script.js",
         "sourceMap": true,
         "strict": true,
         "target": "esnext"
     },
-    "files": ["script.ts"]
+    "include": ["scripts/*"]
 }
