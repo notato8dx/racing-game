@@ -46,5 +46,9 @@ namespace Time {
 
             this.#frame++
         }
+
+        reset() {
+            this.#frame = 0n
+        }
     }
 }

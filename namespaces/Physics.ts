@@ -87,6 +87,18 @@ namespace Physics {
             const row = this.#track[Math.trunc(this.#position[1] / 10)]
 
             if (!row || row[Math.trunc(this.#position[0] / 10)] == 1) {
+                const button = document.createElement('button')
+                button.textContent = 'Restart'
+
+                button.onclick = () => {
+                    this.#timer.reset()
+                    this.#position = [40, 270]
+                    this.#orientation = 0
+                    this.#tick()
+                    button.remove()
+                }
+
+                document.body.appendChild(button)
                 return
             }
 
