@@ -68,6 +68,8 @@ input.addEventListener('change', async () => {
                 } else {
                     const button = document.createElement('button')
                     button.textContent = 'Restart'
+                    button.style.zIndex = '1'
+                    button.style.position = 'fixed'
 
                     button.onclick = () => {
                         game.reset()
