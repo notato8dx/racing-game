@@ -1,51 +1,30 @@
 class Game {
-    private static add(augend: vector, addend: vector): vector {
-        return [augend[0] + addend[0], augend[1] + addend[1]]
-    }
-
-    private static multiply(multiplicand: vector, multiplier: number): vector {
-        return [multiplicand[0] * multiplier, multiplicand[1] * multiplier]
-    }
-
-    private static reduce(number: number, modulus: number) {
-        return (number + modulus) % modulus
-    }
-
+    private readonly car = new Car()
     private readonly timer = new Timer()
-
-    private positionLinear: vector = [40, 270]
-    private positionAngular = 0
 
     constructor(
         private readonly track: Bit[][]
     ) { }
 
     tick(steeringFactor: number) {
-        const row = this.track[Math.trunc(this.positionLinear[1] / 10)]
+        const row = this.track[Math.trunc(this.car.position.linear[1] / 10)]
 
-        if (!row || row[Math.trunc(this.positionLinear[0] / 10)] == 1) {
+        if (!row || row[Math.trunc(this.car.position.linear[0] / 10)] == 1) {
             return false
         }
 
+        this.car.tick(steeringFactor)
         this.timer.tick()
-
-        this.positionLinear = Game.add(this.positionLinear, Game.multiply([Math.sin(this.positionAngular), -Math.cos(this.positionAngular)], 2.5))
-        this.positionAngular = Game.reduce(this.positionAngular + 0.05 * steeringFactor, 6.283185307179586)
-
         return true
     }
 
     reset() {
+        this.car.reset()
         this.timer.reset()
-        this.positionLinear = [40, 270]
-        this.positionAngular = 0
     }
 
     get position() {
-        return {
-            linear: this.positionLinear,
-            angular: this.positionAngular
-        }
+        return this.car.position
     }
 
     get frame() {
