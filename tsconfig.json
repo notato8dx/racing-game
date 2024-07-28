@@ -6,5 +6,5 @@
         "strict": true,
         "target": "esnext"
     },
-    "include": ["namespaces/*"]
+    "include": ["common/*", "client/*", "server/*"]
 }

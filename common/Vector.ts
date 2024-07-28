@@ -1,0 +1,1 @@
+type vector = [number, number]

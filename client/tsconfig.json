@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+        "lib": ["dom", "esnext"]
+    },
+    "extends": "../tsconfig.json",
+    "include": ["*", "../common/*", "../server/*"]
+}
