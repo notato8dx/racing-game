@@ -1,6 +1,4 @@
 namespace Arrays {
-    export type Bit = 0 | 1
-
     function slice(array: Uint8Array, start: number, i = 0): Bit[] {
         const bit = array[start + i]
 

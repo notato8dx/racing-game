@@ -1,18 +1,18 @@
 class Figure {
-    readonly #style
+    private readonly style
 
     constructor(element: HTMLElement, trackArea: Node) {
         trackArea.appendChild(element)
-        this.#style = element.style
+        this.style = element.style
     }
 
-    set transform({
-        position: [horizontalPosition, verticalPosition],
-        orientation
+    set position({
+        linear: [horizontal, vertical],
+        angular
     }: {
-        position: vector,
-        orientation: number
+        linear: vector,
+        angular: number
     }) {
-        this.#style.transform = `translateX(${horizontalPosition}px) translateY(${verticalPosition}px) rotateZ(${orientation}rad)`
+        this.style.transform = `translateX(${horizontal}px) translateY(${vertical}px) rotateZ(${angular}rad)`
     }
 }

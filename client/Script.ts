@@ -41,7 +41,7 @@ input.addEventListener('change', async () => {
     const element = document.createElement('start-button')
     element.onclick = () => {
         element.remove()
-        const game = new Physics.Game(tiles)
+        const game = new Game(tiles)
         const car = new Figure(document.createElement('car'), track)
         const steeringAxis = new Axis(new Key('ArrowRight'), new Key('ArrowLeft'))
         const minute = document.createElement('span')
@@ -55,10 +55,7 @@ input.addEventListener('change', async () => {
         function tick() {
             requestAnimationFrame(() => {
                 if (game.tick(steeringAxis.factor)) {
-                    car.transform = {
-                        position: game.position,
-                        orientation: game.orientation
-                    }
+                    car.position = game.position
 
                     const millisecondCurrent = divide(game.frame * secondDuration, 60n)
                     const secondCurrent = millisecondCurrent / secondDuration

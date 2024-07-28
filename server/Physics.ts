@@ -1,59 +1,55 @@
-namespace Physics {
-    function add(augend: vector, addend: vector): vector {
+class Game {
+    private static add(augend: vector, addend: vector): vector {
         return [augend[0] + addend[0], augend[1] + addend[1]]
     }
 
-    function multiply(multiplicand: vector, multiplier: number): vector {
+    private static multiply(multiplicand: vector, multiplier: number): vector {
         return [multiplicand[0] * multiplier, multiplicand[1] * multiplier]
     }
 
-    function reduce(number: number, modulus: number) {
+    private static reduce(number: number, modulus: number) {
         return (number + modulus) % modulus
     }
 
-    export class Game {
-        readonly #timer = new Time.Timer()
-        readonly #track
+    private readonly timer = new Timer()
 
-        #position: vector = [40, 270]
-        #orientation = 0
+    private positionLinear: vector = [40, 270]
+    private positionAngular = 0
 
-        constructor(track: (number | undefined)[][]) {
-            this.#track = track
+    constructor(
+        private readonly track: Bit[][]
+    ) { }
+
+    tick(steeringFactor: number) {
+        const row = this.track[Math.trunc(this.positionLinear[1] / 10)]
+
+        if (!row || row[Math.trunc(this.positionLinear[0] / 10)] == 1) {
+            return false
         }
 
-        tick(steeringFactor: number) {
-            const row = this.#track[Math.trunc(this.#position[1] / 10)]
+        this.timer.tick()
 
-            if (!row || row[Math.trunc(this.#position[0] / 10)] == 1) {
-                return false
-            }
+        this.positionLinear = Game.add(this.positionLinear, Game.multiply([Math.sin(this.positionAngular), -Math.cos(this.positionAngular)], 2.5))
+        this.positionAngular = Game.reduce(this.positionAngular + 0.05 * steeringFactor, 6.283185307179586)
 
-            this.#timer.tick()
+        return true
+    }
 
-            this.#position = add(this.#position, multiply([Math.sin(this.#orientation), -Math.cos(this.#orientation)], 2.5)),
-                this.#orientation = reduce(this.#orientation + 0.05 * steeringFactor, 6.283185307179586)
+    reset() {
+        this.timer.reset()
+        this.positionLinear = [40, 270]
+        this.positionAngular = 0
+    }
 
-            return true
+    get position() {
+        return {
+            linear: this.positionLinear,
+            angular: this.positionAngular
         }
+    }
 
-        reset() {
-            this.#timer.reset()
-            this.#position = [40, 270]
-            this.#orientation = 0
-        }
-
-        get position() {
-            return this.#position
-        }
-
-        get orientation() {
-            return this.#orientation
-        }
-
-        get frame() {
-            return this.#timer.frame
-        }
+    get frame() {
+        return this.timer.frame
     }
 }
 
