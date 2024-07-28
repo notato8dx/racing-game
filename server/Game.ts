@@ -37,6 +37,7 @@ class Game {
     reset() {
         this.car.reset()
         this.timer.reset()
+        this.lap = 0
     }
 
     get position() {

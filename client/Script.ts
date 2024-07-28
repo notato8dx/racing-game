@@ -13,6 +13,13 @@ function format(number: string, digit: number): string {
 const secondDuration = 1000n
 const minuteDuration = 60n
 
+const ui = document.createElement('div')
+ui.style.width = '100%'
+ui.style.height = '100%'
+ui.style.zIndex = '1'
+ui.style.position = 'fixed'
+ui.style.padding = '4px'
+
 const input = document.createElement('input')
 input.type = 'file'
 
@@ -50,7 +57,9 @@ input.addEventListener('change', async () => {
 
         const timer = document.createElement('timer')
         timer.replaceChildren(minute, ':', second, '.', millisecond)
-        document.body.appendChild(timer)
+        ui.appendChild(timer)
+
+        document.body.appendChild(ui)
 
         function tick() {
             requestAnimationFrame(() => {
@@ -77,7 +86,7 @@ input.addEventListener('change', async () => {
                         button.remove()
                     }
 
-                    document.body.appendChild(button)
+                    ui.appendChild(button)
                 }
             })
         }
