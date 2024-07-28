@@ -2,6 +2,8 @@ class Game {
     private readonly car = new Car()
     private readonly timer = new Timer()
 
+    private lap = 0
+
     constructor(
         private readonly track: Bit[][]
     ) { }
@@ -13,7 +15,21 @@ class Game {
             return false
         }
 
+        const previousPositionVertical = this.car.position.linear[1]
         this.car.tick(steeringFactor)
+
+        if (this.car.position.linear[0] > 10 && this.car.position.linear[0] < 60) {
+            if (this.car.position.linear[1] <= 250 && previousPositionVertical > 250) {
+                this.lap++
+
+                if (this.lap == 3) {
+                    return false
+                }
+            } else if (this.car.position.linear[1] > 250 && previousPositionVertical <= 250) {
+                this.lap--
+            }
+        }
+
         this.timer.tick()
         return true
     }
